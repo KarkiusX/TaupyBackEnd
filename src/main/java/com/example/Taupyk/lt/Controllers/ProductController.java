@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/")
-@CrossOrigin
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
 @Validated
 public class ProductController {
 
@@ -53,7 +53,7 @@ public class ProductController {
     }
     @Transactional
     @GetMapping(path = "/products/{name}")
-    public ResponseEntity getProductBy(@PathVariable String name, HttpServletRequest request)
+    public ResponseEntity getProductsBy(@PathVariable String name, HttpServletRequest request)
     {
         Optional<IP> ips = ipRepository.findAll().stream().filter(ip -> ip.getIP().equals(request.getRemoteAddr())).findFirst();
         if(ips.isPresent())
@@ -92,7 +92,7 @@ public class ProductController {
         List<Product> products = productRepositry.findAll().stream().filter(p -> p.getName().equals(name)).collect(Collectors.toList());
         if(products.isEmpty())
         {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Nerastas produktas");
         }
         else
             return new ResponseEntity<>(products, HttpStatus.OK);
@@ -106,7 +106,8 @@ public class ProductController {
         else
             return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     @DeleteMapping(path = "/product/{id}")
     public ResponseEntity deleteProduct(@PathVariable long id)
     {
@@ -119,6 +120,7 @@ public class ProductController {
                     commentRepository.delete(comment);
             });
             productRepositry.deleteById(id);
+            System.out.println("ProductResp" + productRepositry.count());
             return ResponseEntity.ok().build();
         }
         else
@@ -126,7 +128,7 @@ public class ProductController {
             return ResponseEntity.noContent().build();
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @PutMapping(path = "/product/{id}")
     public ResponseEntity<Product> updateProduct(@RequestBody ProductDto product, @PathVariable long id)
@@ -134,6 +136,7 @@ public class ProductController {
         Optional<Product> product1 = productRepositry.findById(id);
         if(product1.isPresent())
         {
+            System.out.println("Test" + product.getPrice());
             productRepositry.updateProduct(product.getName(), product.getPrice(), id);
             product1 = productRepositry.findById(id);
             return new ResponseEntity<Product>(product1.get(), HttpStatus.OK);
@@ -143,19 +146,19 @@ public class ProductController {
             return ResponseEntity.noContent().build();
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/product/")
     public ResponseEntity createProduct(@RequestBody Product product)
     {
         Optional<Market> market = marketRepository.findById(product.getMarket().getUId());
         if(market.isPresent())
         {
-
             product.setMarket(market.get());
             Product productR = productRepositry.save(product);
 
             ProductDto productDto = new ProductDto();
             productDto.setName(productR.getName());
+            productDto.setProductLink(productR.getProductLink());
             productDto.setPrice(productR.getPrice());
 
             return new ResponseEntity<>(productDto, HttpStatus.CREATED);

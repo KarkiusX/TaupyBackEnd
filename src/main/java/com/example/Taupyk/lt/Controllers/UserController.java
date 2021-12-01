@@ -1,5 +1,6 @@
 package com.example.Taupyk.lt.Controllers;
 
+import com.example.Taupyk.lt.DTO.UserDto;
 import com.example.Taupyk.lt.DTO.UserLoginDto;
 import com.example.Taupyk.lt.Models.CustomUser;
 import com.example.Taupyk.lt.Models.Role;
@@ -8,25 +9,29 @@ import com.example.Taupyk.lt.Repositories.RoleRepository;
 import com.example.Taupyk.lt.Security.JwtToken;
 import com.example.Taupyk.lt.DTO.UserRegisterDto;
 import com.example.Taupyk.lt.Security.UserService;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.util.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -53,36 +58,92 @@ public class UserController {
         }
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleRepository.findRoleByName("USER"));
-        if(customUser.getUsername().equals("Karolis"))
+        if(customUser.getUsername().contains("Karolis"))
             roleSet.add(roleRepository.findRoleByName("ADMIN"));
         CustomUser newUser = new CustomUser(new User(customUser.getUsername(), encoder.encode(customUser.getPassword()), new ArrayList<>()), customUser.getEmail(), roleSet);
         userRepository.save(newUser);
 
-        final String jwt = jwtToken.generateToken(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @GetMapping(path = "/names/{name}")
+    public boolean isValidName(@PathVariable String name)
+    {
 
-        Cookie jwtTokenCookie = new Cookie("auth", jwt);
+        long usersWithSameName = userRepository.findAll().stream().filter(us -> us.getName().equals(name)).count();
 
-        jwtTokenCookie.setMaxAge(86400);
-        //jwtTokenCookie.setSecure(true);
-        jwtTokenCookie.setHttpOnly(true);
-        jwtTokenCookie.setPath("api/user/");
-        response.addCookie(jwtTokenCookie);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(jwt);
+        if(usersWithSameName > 0)
+            return false;
+
+        return true;
+    }
+    @GetMapping(path = "/user/{userid}")
+    public ResponseEntity GetUser(@PathVariable long userid)
+    {
+
+        Optional<CustomUser> user = userRepository.findAll().stream().filter(us -> us.getUId() == userid).findFirst();
+
+        if(!user.isPresent())
+        {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok().body(user.get());
+    }
+    @GetMapping(path = "/email/{email}")
+    public boolean isValidEmail(@PathVariable String name)
+    {
+
+        long usersWithSameName = userRepository.findAll().stream().filter(us -> us.getEmail().equals(name)).count();
+
+        if(usersWithSameName > 0)
+            return false;
+
+        return true;
     }
     @PostMapping(path = "/login/")
     public ResponseEntity loginUser(@RequestBody UserLoginDto customUser, HttpServletResponse response)
     {
-        Authentication authenticate = authenticationManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                customUser.getUsername(), customUser.getPassword())
-                        );
 
-        final CustomUser user = (CustomUser) userService.loadUserByUsername(customUser.getUsername());
-        final String jwt = jwtToken.generateToken(user);
+        Optional<CustomUser> userExist = userRepository.findAll().stream().filter(user -> user.getEmail().equals(customUser.getEmail())).findFirst();
 
-        return ResponseEntity.ok().build();
+        if(userExist.isPresent())
+        {
+            Authentication authenticate = authenticationManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    userExist.get().getUsername(), customUser.getPassword())
+                    );
+            final CustomUser user = (CustomUser) userService.loadUserByUsername(userExist.get().getUsername());
+            final String jwt = jwtToken.generateToken(user);
 
+            if(customUser.isstayLoggedIn())
+            {
+                Cookie jwtTokenCookie = new Cookie("auth", jwt);
+
+                jwtTokenCookie.setMaxAge(432000);
+                //jwtTokenCookie.setSecure(true);
+                jwtTokenCookie.setHttpOnly(false);
+                jwtTokenCookie.setPath("/");
+                response.addCookie(jwtTokenCookie);
+            }
+
+            return ResponseEntity.ok(jwt);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    @GetMapping(path = "/authorize")
+    public ResponseEntity tryAuthorize()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null)
+        {
+            CustomUser customUser = (CustomUser) authentication.getPrincipal();
+            customUser.getRoles().forEach(role -> System.out.println(role.getName().hashCode()));
+            List<String> roles = customUser.getRoles().stream().map(role -> role.getName()).filter(role -> role.equals("ADMIN")).toList();
+            return ResponseEntity.ok(new UserDto(customUser.getUId(), customUser.getUsername(), (roles.size() > 0)));
+        }
+        return ResponseEntity.ok().build();
+    }
+
 }

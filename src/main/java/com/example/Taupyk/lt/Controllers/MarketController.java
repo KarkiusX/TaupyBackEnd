@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/")
-@CrossOrigin
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
 @Validated
 public class MarketController {
 
@@ -66,12 +66,12 @@ public class MarketController {
             return ResponseEntity.noContent().build();
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/market/")
     public ResponseEntity createMarket(@Valid @RequestBody MarketDto market)
     {
         if(market == null)
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         Market marketR = marketRepository.save(new Market(market.getName(), market.getIconName()));
         return ResponseEntity.status(HttpStatus.CREATED).body(market);
@@ -101,7 +101,7 @@ public class MarketController {
             return ResponseEntity.noContent().build();
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @PutMapping(path = "/market/{id}")
     public ResponseEntity<Market> updateMarket(@PathVariable long id, @RequestBody Market market)

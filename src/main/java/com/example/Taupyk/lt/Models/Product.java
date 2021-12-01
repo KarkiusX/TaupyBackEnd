@@ -16,7 +16,17 @@ public class Product {
     private String name;
     private double price;
 
-    @ManyToOne(cascade = {CascadeType.REMOVE})
+    private String productLink;
+
+    public String getProductLink() {
+        return productLink;
+    }
+
+    public void setProductLink(String productLink) {
+        this.productLink = productLink;
+    }
+
+    @ManyToOne
     @JoinColumn(name = "market_uid", nullable = false)
     private Market market;
 

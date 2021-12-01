@@ -14,6 +14,16 @@ public class ProductDto {
     @JsonProperty("price")
     private double price;
 
+    public String getProductLink() {
+        return productLink;
+    }
+
+    public void setProductLink(String productLink) {
+        this.productLink = productLink;
+    }
+
+    private String productLink;
+
     public String getName() {
         return name;
     }

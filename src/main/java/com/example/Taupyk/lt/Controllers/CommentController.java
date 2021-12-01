@@ -51,14 +51,14 @@ public class CommentController {
         }).toList();
         return ResponseEntity.status(HttpStatus.OK).body(commentDTOS);
     }
-    @GetMapping(path = "/comment/{userId}")
-    public ResponseEntity<List<Comment>> getComment(@PathVariable long userId)
+    @GetMapping(path = "/comment/{productID}")
+    public ResponseEntity getComment(@PathVariable long productID)
     {
-        List<Comment> comments = commentRepository.findAll().stream().filter(p -> p.getUser().getUId() == userId).collect(Collectors.toList());
+        List<Comment> comments = commentRepository.findAll().stream().filter(p -> p.getProduct().getUId() == productID).collect(Collectors.toList());
         if(comments.isEmpty())
             return ResponseEntity.noContent().build();
 
-        return new ResponseEntity<List<Comment>>(comments, HttpStatus.FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
     @DeleteMapping(path = "/comment/{commentId}")
     public ResponseEntity<Comment> deleteComment(@PathVariable long commentId)
@@ -107,7 +107,6 @@ public class CommentController {
         Optional<Product> product = productRepositry.findById(comment.getProduct().getUId());
         if(!product.isPresent())
             return ResponseEntity.noContent().build();
-
 
         comment.setTimeStamp(comment.getTimeStampTime());
         comment.setUser(user.get());

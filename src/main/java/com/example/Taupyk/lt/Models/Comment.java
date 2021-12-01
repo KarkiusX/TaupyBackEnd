@@ -16,6 +16,7 @@ public class Comment {
     @NotNull
     private String text;
 
+
     @ManyToOne
     @JoinColumn(name="User_UID", referencedColumnName = "UId")
     private CustomUser user;

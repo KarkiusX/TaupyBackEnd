@@ -1,15 +1,25 @@
 package com.example.Taupyk.lt.DTO;
 
 public class UserLoginDto {
-    private String username;
+    private String email;
     private String password;
+    private boolean stayLoggedIn;
 
-    public String getUsername() {
-        return username;
+    public boolean isstayLoggedIn() {
+        return stayLoggedIn;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setstayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

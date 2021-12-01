@@ -8,9 +8,6 @@ import javax.validation.constraints.NotBlank;
 
 public class MarketDto {
 
-    @JsonProperty("uid")
-    private long UId;
-
     @NotBlank(message = "Name is mandatory")
     @JsonProperty("name")
     private String name;
@@ -19,13 +16,6 @@ public class MarketDto {
     @JsonProperty("iconName")
     private String iconName;
 
-    public long getUId() {
-        return UId;
-    }
-
-    public void setUId(long UId) {
-        this.UId = UId;
-    }
 
     public String getName() {
         return name;

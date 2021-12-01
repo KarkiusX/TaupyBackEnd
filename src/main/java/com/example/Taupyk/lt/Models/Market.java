@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Market {
@@ -18,8 +19,8 @@ public class Market {
     private String name;
     private String iconName;
 
-    @OneToMany(mappedBy = "market", cascade = {CascadeType.REMOVE})
-    private List<Product> products;
+    @OneToMany(mappedBy = "market")
+    private Set<Product> products;
 
 
     public Market(String name, String iconName)

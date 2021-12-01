@@ -82,7 +82,7 @@ public class JwtToken {
         }
         return true;
     }
-    UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
 
         final Claims claims = extractAllClaims(token);
 

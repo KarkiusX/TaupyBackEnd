@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
@@ -45,7 +46,7 @@ public class UserController {
     @PostMapping(path = "/register/")
     public ResponseEntity createUser(@RequestBody UserRegisterDto customUser, HttpServletResponse response)
     {
-        List<CustomUser> userWithSameName = userRepository.findAll().stream().filter(u -> u.getUsername() == customUser.getUsername()).toList();
+        List<CustomUser> userWithSameName = userRepository.findAll().stream().filter(u -> u.getUsername() == customUser.getUsername()).collect(Collectors.toList());
         if(userWithSameName.size() > 0)
         {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(customUser);

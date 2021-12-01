@@ -135,7 +135,7 @@ public class UserController {
         {
             CustomUser customUser = (CustomUser) authentication.getPrincipal();
             customUser.getRoles().forEach(role -> System.out.println(role.getName().hashCode()));
-            List<String> roles = customUser.getRoles().stream().map(role -> role.getName()).filter(role -> role.equals("ADMIN")).toList();
+            List<String> roles = customUser.getRoles().stream().map(role -> role.getName()).filter(role -> role.equals("ADMIN")).collect(Collectors.toList());
             return ResponseEntity.ok(new UserDto(customUser.getUId(), customUser.getUsername(), (roles.size() > 0)));
         }
         return ResponseEntity.ok().build();

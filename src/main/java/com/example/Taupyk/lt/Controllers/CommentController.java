@@ -46,7 +46,7 @@ public class CommentController {
             String name = userRepository.findById(comment.getUser().getUId()).get().getUsername();
             LocalDate localDate = new Date(comment.getTimeStamp() * 1000).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             return new CommentDTO(comment.getText(),new UserDto(name), localDate);
-        }).toList();
+        }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(commentDTOS);
     }
     @GetMapping(path = "/comment/{productID}")

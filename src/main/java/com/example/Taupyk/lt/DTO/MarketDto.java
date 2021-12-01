@@ -1,8 +1,6 @@
 package com.example.Taupyk.lt.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.NotNull;
-
 import javax.validation.constraints.NotBlank;
 
 

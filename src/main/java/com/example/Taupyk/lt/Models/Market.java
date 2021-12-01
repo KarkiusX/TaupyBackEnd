@@ -1,12 +1,7 @@
 package com.example.Taupyk.lt.Models;
 
-import com.sun.istack.NotNull;
-import jdk.vm.ci.code.site.Mark;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.Set;
 
 @Entity

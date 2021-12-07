@@ -7,6 +7,7 @@ import com.example.Taupyk.lt.Models.Product;
 import com.example.Taupyk.lt.Repositories.CommentRepository;
 import com.example.Taupyk.lt.Repositories.MarketRepository;
 import com.example.Taupyk.lt.Repositories.ProductRepositry;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,7 +94,13 @@ public class MarketController {
         Optional<Market> market = marketRepository.findById(id);
         if(market.isPresent())
         {
-            marketRepository.deleteById(id);
+            try{
+                marketRepository.deleteById(id);
+            }
+            catch (Exception exception)
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
             return ResponseEntity.ok(market.get());
         }
         else

@@ -45,7 +45,6 @@ export default function LinkBar()
                   await instance.get('authorize').then(res => {
                       if(res.status === 200)
                       {
-                        console.log(res.data);
                         dispatch({type: 'Active', data:res.data})
                         setLoadUser(true);
                       }

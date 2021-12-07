@@ -4,7 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import LinkBar from "./LinkBar"
 import Home from './Home';
-import App from "./App"
+import Products from "./Products"
 import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GlobalProvider } from './Global';
 import Login from './Login';
@@ -28,7 +28,7 @@ ReactDOM.render(
     <Routes>
         <Route path="/" element={<LinkBar />}>
            <Route index element={<Home />} />
-           <Route path="find" element={<App/>} />
+           <Route path="find" element={<Products/>} />
            <Route path="register" element={<Register/>}/>
            <Route path="login" element={<Login/>}/>
            <Route path="item" element={<Item/>}/>

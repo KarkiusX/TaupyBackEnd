@@ -41,7 +41,7 @@ function Product({uid, name, price, imageMarket, imageProduct, send, update}) {
         var Endpoint = "product/"+uid;
         await instance.put(Endpoint, dataJson).then(res => {
            setEdit(false);
-           update(Actions.PREUPDATEU);
+           update(Actions.PREUPDATE);
            update(Actions.POSTUPDATE);
         }).catch(function (error){
         })

@@ -63,9 +63,8 @@ export default function LinkBar()
     }, [])
     
     return(
-      <div>
-         <div style={{paddingBottom:"150px", overflow:"auto"}}>
-           {loadedUser && <div className="h-100"> <nav className="navbar navbar-expand-lg navbar-light bg-dark">
+         <div style={{backgroundColor:"slategrey"}}>
+           {loadedUser && <div className="h-100" style={{paddingTop:"150px"}}> <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
             <Navbar.Brand>
             <Animation/>
             </Navbar.Brand>
@@ -89,15 +88,17 @@ export default function LinkBar()
                           <Link style={{ textDecoration: 'none' }} className="text-light nav-link" to="logout">Atsijungti</Link>
               </Nav>
               } 
-              </div>
+                  </div>
               </nav>
         
             <Outlet/>
 
-            </div>
+        </div>
         }
+            <div style={{paddingBottom:"150px", overflow:"auto"}}>
             </div>
             <Footer/>
             </div>
+
     );
 }

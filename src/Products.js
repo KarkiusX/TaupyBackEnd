@@ -13,7 +13,7 @@ import { Actions } from './const/Actions';
 
 const axios = require('axios');
 
-export default function App() {
+export default function Products() {
 
   const [state, dispatch] = useContext(Context);
 

@@ -34,11 +34,12 @@ export default function LinkBar()
             result = await instance.get('api/market');
             dispatch({type: 'Markets', data: result.data});
             var cookie = Cookies.get("auth");
+            console.log(cookie);
             if(cookie)
             {
                 const instance = axios.create({
-                    baseURL: 'http://localhost:8080/',
-                    timeout: 1000,
+                    baseURL: 'https://taupyk.herokuapp.com/',
+                    timeout: 5000,
                     headers: {'Access-Control-Allow-Credentials' : true, 'Authorization' : "Bearer " + cookie}
                   })
               

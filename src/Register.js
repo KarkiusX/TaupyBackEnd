@@ -14,7 +14,7 @@ function Register()
       })
 
     const instance = axios.create({
-        baseURL: 'http://158.129.21.109:8080/',
+        baseURL: 'https://taupyk.herokuapp.com/',
         timeout: 1000,
         headers: {'Access-Control-Allow-Origin' : '*'}
         })

@@ -22,7 +22,7 @@ export default function Item() {
         setShow(true);
     }
     const instance = axios.create({
-        baseURL: 'http://localhost:8080/api',
+        baseURL: 'https://taupyk.herokuapp.com//api',
         timeout: 1000,
         headers: {
             'Content-Type': 'application/json'

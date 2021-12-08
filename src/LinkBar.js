@@ -60,7 +60,7 @@ export default function LinkBar()
           }
           fetchData();
     
-    }, [])
+    }, [loadedUser])
     
     return(
          <div style={{backgroundColor:"slategrey"}}>

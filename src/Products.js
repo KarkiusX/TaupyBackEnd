@@ -71,11 +71,10 @@ export default function Products() {
     var cookie = Cookies.get("auth");
 
     const SubmitInstance = axios.create({
-      baseURL: 'http://localhost:8080/api',
+      baseURL: 'https://taupyk.herokuapp.com/',
       timeout: 1000,
       headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin' : "http://localhost:3000/", 
           'Access-Control-Allow-Credentials' : true,
           'Authorization' : "Bearer " + cookie
       }

@@ -21,11 +21,10 @@ function Product({uid, name, price, imageMarket, imageProduct, send, update}) {
     var cookie = Cookies.get("auth");
 
     const instance = axios.create({
-        baseURL: 'http://localhost:8080/api',
+        baseURL: 'https://taupyk.herokuapp.com/',
         timeout: 1000,
         headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin' : "http://localhost:3000/", 
             'Access-Control-Allow-Credentials' : true,
             'Authorization' : "Bearer " + cookie
         }

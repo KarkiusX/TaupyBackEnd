@@ -40,7 +40,6 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JwtToken jwtToken;
-
     @Autowired
     private RoleRepository roleRepository;
 
@@ -118,8 +117,8 @@ public class UserController {
                 Cookie jwtTokenCookie = new Cookie("auth", jwt);
 
                 jwtTokenCookie.setMaxAge(432000);
-                //jwtTokenCookie.setSecure(true);
-                jwtTokenCookie.setHttpOnly(false);
+                jwtTokenCookie.setSecure(true);
+                jwtTokenCookie.setHttpOnly(true);
                 jwtTokenCookie.setPath("/");
                 response.addCookie(jwtTokenCookie);
             }

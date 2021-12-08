@@ -72,9 +72,10 @@ export default function Products() {
 
     const SubmitInstance = axios.create({
       baseURL: 'https://taupyk.herokuapp.com/',
-      timeout: 1000,
+      timeout: 3000,
       headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin' : "https://taupyk-cia.herokuapp.com/", 
           'Access-Control-Allow-Credentials' : true,
           'Authorization' : "Bearer " + cookie
       }

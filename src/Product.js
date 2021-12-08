@@ -22,9 +22,10 @@ function Product({uid, name, price, imageMarket, imageProduct, send, update}) {
 
     const instance = axios.create({
         baseURL: 'https://taupyk.herokuapp.com/',
-        timeout: 1000,
+        timeout: 3000,
         headers: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin' : "https://taupyk-cia.herokuapp.com/", 
             'Access-Control-Allow-Credentials' : true,
             'Authorization' : "Bearer " + cookie
         }

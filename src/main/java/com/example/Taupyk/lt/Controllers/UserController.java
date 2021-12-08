@@ -10,7 +10,9 @@ import com.example.Taupyk.lt.Security.JwtToken;
 import com.example.Taupyk.lt.DTO.UserRegisterDto;
 import com.example.Taupyk.lt.Security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -114,13 +116,21 @@ public class UserController {
 
             if(customUser.isstayLoggedIn())
             {
-                Cookie jwtTokenCookie = new Cookie("auth", jwt);
+               // Cookie jwtTokenCookie = new Cookie("auth", jwt);
 
-                jwtTokenCookie.setMaxAge(432000);
-                jwtTokenCookie.setSecure(false);
-                jwtTokenCookie.setHttpOnly(false);
-                jwtTokenCookie.setPath("/");
-                response.addCookie(jwtTokenCookie);
+                ResponseCookie responseCookie = ResponseCookie.fromClientResponse("auth", jwt)
+                        .maxAge(432000)
+                        .path("/")
+                        .sameSite("None")
+                        .secure(true)
+                        .build();
+
+//                jwtTokenCookie.setMaxAge(432000);
+//                jwtTokenCookie.setSecure(false);
+//                jwtTokenCookie.setHttpOnly(false);
+//                jwtTokenCookie.setPath("/");
+                response.setHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+                //response.addCookie(jwtTokenCookie);
             }
 
             return ResponseEntity.ok(jwt);

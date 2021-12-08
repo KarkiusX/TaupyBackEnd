@@ -118,7 +118,7 @@ public class UserController {
 
                 jwtTokenCookie.setMaxAge(432000);
                 jwtTokenCookie.setSecure(true);
-                jwtTokenCookie.setHttpOnly(true);
+                jwtTokenCookie.setHttpOnly(false);
                 jwtTokenCookie.setPath("/");
                 response.addCookie(jwtTokenCookie);
             }

@@ -52,7 +52,7 @@ export default function Markets()
       useEffect(()=> {
         async function fetchData() {
             const instance = axios.create({
-                baseURL: 'http://localhost:8080/api',
+                baseURL: 'https://taupyk.herokuapp.com/api',
                 timeout: 1000
               })
             let result = await instance.get('market');

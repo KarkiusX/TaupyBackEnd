@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/")
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
+@CrossOrigin(origins = "https://taupyk-cia.herokuapp.com/", allowCredentials = "true")
 @Validated
 public class MarketController {
 

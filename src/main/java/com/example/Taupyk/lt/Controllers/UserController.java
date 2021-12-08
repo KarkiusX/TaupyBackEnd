@@ -26,7 +26,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
+//@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
+@CrossOrigin(origins = "https://taupyk-cia.herokuapp.com/", allowCredentials = "true")
 public class UserController {
 
     @Autowired
